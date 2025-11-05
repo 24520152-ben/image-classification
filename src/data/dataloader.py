@@ -2,17 +2,25 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-def create_datasets(train_dir, VAL_SPLIT=0.2, IMG_SIZE=(224, 224), BATCH_SIZE=32, SEED=24520152, SHUFFLE_SIZE=1000):
+def build_data_augmentation():
+    """Create a simple data augmentation pipeline"""
+    return tf.keras.Sequential([
+        layers.RandomFlip("horizontal"),
+        layers.RandomRotation(0.1),
+        layers.RandomZoom(0.1),
+    ], name="data_augmentation")
+
+def create_datasets(train_dir, preprocess_fn, VAL_SPLIT=0.2, IMG_SIZE=(224, 224), BATCH_SIZE=32, SEED=24520152):
     """
     Create Tensorflow datasets for training and validation
 
     Args:
         train_dir (str): Path to the training image directory
+        preprocess_fn (callable): The preprocessing function specific to the model (e.g., tf.keras.applications.efficientnet.preprocess_input)
         VAL_SPLIT (float): Fraction of data to use for validation
         IMG_SIZE (tuple): Target image size
         BATCH_SIZE (int): Batch size
         SEED (int): Random seed for reproducibility
-        SHUFFLE_SIZE (int): Buffer size for shuffling training data
 
     Returns:
         train_ds, val_ds (tf.data.Dataset): Preprocessed datasets
@@ -35,12 +43,21 @@ def create_datasets(train_dir, VAL_SPLIT=0.2, IMG_SIZE=(224, 224), BATCH_SIZE=32
         batch_size=BATCH_SIZE,
     )
 
-    normalization_layer = layers.Rescaling(1./255)
-    train_ds = train_ds.map(lambda x, y: (normalization_layer(x), y))
-    val_ds = val_ds.map(lambda x, y: (normalization_layer(x), y))
-
     AUTOTUNE = tf.data.AUTOTUNE
-    train_ds = train_ds.cache().shuffle(SHUFFLE_SIZE).prefetch(buffer_size=AUTOTUNE)
-    val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+    data_augmentation = build_data_augmentation()
+
+    def augment_and_preprocess_train(image, label):
+        """Apply augmentation and preprocessing to the training set"""
+        image = data_augmentation(image, training=True)
+        image = preprocess_fn(image)
+        return image, label
+
+    def preprocess_val(image, label):
+        """Apply preprocessing to the validation set (no augmentation)"""
+        image = preprocess_fn(image)
+        return image, label
+
+    train_ds = train_ds.cache().map(augment_and_preprocess_train, num_parallel_calls=AUTOTUNE).prefetch(buffer_size=AUTOTUNE)
+    val_ds = val_ds.cache().map(preprocess_val, num_parallel_calls=AUTOTUNE).prefetch(buffer_size=AUTOTUNE)
 
     return train_ds, val_ds
