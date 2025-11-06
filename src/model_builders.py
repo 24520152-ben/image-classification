@@ -18,8 +18,9 @@ def build_efficientnet(INPUT_SHAPE=(224, 224, 3), NUM_CLASSES=6, DROPOUT_RATE=0.
     """
     input_layer = tf.keras.Input(shape=INPUT_SHAPE, name="input_layer")
 
-    backbone = keras_hub.models.Backbone.from_preset(
-        "efficientnet_b5_sw_imagenet"
+    backbone = applications.EfficientNetB5(
+        include_top=False,
+        weights="imagenet",
     )
     backbone.trainable = False
 
