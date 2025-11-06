@@ -5,7 +5,7 @@ import keras_hub
 
 def build_efficientnet(INPUT_SHAPE=(224, 224, 3), NUM_CLASSES=6, DROPOUT_RATE=0.3):
     """
-    Build an EfficientNetB5 model based on Swin Transformer train / pretrain recipe with modifications with a custom head for classification
+    Build an EfficientNetB5 model with a custom head for classification
     This uses feature extraction (freezing the backbone)
 
     Args:
