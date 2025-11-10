@@ -19,4 +19,4 @@ seaborn==0.13.2
 streamlit==1.50.0
 tensorboard==2.20.0
 tensorboard-data-server==0.7.2
-tensorflow==2.20.0
+tensorflow-cpu==2.20.0
