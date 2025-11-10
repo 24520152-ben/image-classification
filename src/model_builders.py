@@ -1,7 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras import applications
-import keras_hub
 
 def build_efficientnet(INPUT_SHAPE=(224, 224, 3), NUM_CLASSES=6, DROPOUT_RATE=0.3):
     """
