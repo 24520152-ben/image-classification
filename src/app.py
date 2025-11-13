@@ -46,7 +46,7 @@ def preprocess_image(uploaded_image, model_name, IMG_SIZE=(224, 224)):
 def load_all_models():
     models = {}
     for model_name in MODELS:
-        models[model_name] = tf.keras.models.load_model(os.path.join(CHECKPOINT_DIR, f'{model_name}_best.keras'))
+        models[model_name] = tf.keras.models.load_model(os.path.join(CHECKPOINT_DIR, f'{model_name}_finetune.keras'))
     return models
 
 def predict_label(models_dict, model_name, image):
