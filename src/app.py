@@ -1,4 +1,4 @@
-from train_and_save import PREPROCESSOR
+from tensorflow.keras import applications
 import matplotlib.pyplot as plt
 import plotly.express as px
 import tensorflow as tf
@@ -18,6 +18,13 @@ MODELS = [
     'ResNet50V2',
     'MobileNetV2',
 ]
+
+PREPROCESSOR = {
+    "EfficientNetB5": applications.efficientnet.preprocess_input,
+    "DenseNet121": applications.densenet.preprocess_input,
+    "ResNet50V2": applications.resnet_v2.preprocess_input,
+    "MobileNetV2": applications.mobilenet_v2.preprocess_input,
+}
 
 CLASS_LABELS = [
     'buildings', 
