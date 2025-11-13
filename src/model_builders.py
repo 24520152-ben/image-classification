@@ -23,7 +23,7 @@ def build_efficientnet(INPUT_SHAPE=(224, 224, 3), NUM_CLASSES=6, DROPOUT_RATE=0.
     )
     backbone.trainable = False
 
-    x = backbone(input_layer)
+    x = backbone(input_layer, training=False)
     x = layers.GlobalAveragePooling2D(name="pooling_layer")(x)
     x = layers.Dropout(DROPOUT_RATE, name="dropout_layer")(x)
     output_layer = layers.Dense(NUM_CLASSES, activation="softmax", name="output_layer")(x)
@@ -52,7 +52,7 @@ def build_densenet(INPUT_SHAPE=(224, 224, 3), NUM_CLASSES=6, DROPOUT_RATE=0.3):
     )
     backbone.trainable = False
 
-    x = backbone(input_layer)
+    x = backbone(input_layer, training=False)
     x = layers.GlobalAveragePooling2D(name="pooling_layer")(x)
     x = layers.Dropout(DROPOUT_RATE, name="dropout_layer")(x)
     output_layer = layers.Dense(NUM_CLASSES, activation="softmax", name="output_layer")(x)
@@ -81,7 +81,7 @@ def build_resnet(INPUT_SHAPE=(224, 224, 3), NUM_CLASSES=6, DROPOUT_RATE=0.3):
     )
     backbone.trainable = False
 
-    x = backbone(input_layer)
+    x = backbone(input_layer, training=False)
     x = layers.GlobalAveragePooling2D(name="pooling_layer")(x)
     x = layers.Dropout(DROPOUT_RATE, name="dropout_layer")(x)
     output_layer = layers.Dense(NUM_CLASSES, activation="softmax", name="output_layer")(x)
@@ -110,7 +110,7 @@ def build_mobilenet(INPUT_SHAPE=(224, 224, 3), NUM_CLASSES=6, DROPOUT_RATE=0.3):
     )
     backbone.trainable = False
 
-    x = backbone(input_layer)
+    x = backbone(input_layer, training=False)
     x = layers.GlobalAveragePooling2D(name="pooling_layer")(x)
     x = layers.Dropout(DROPOUT_RATE, name="dropout_layer")(x)
     output_layer = layers.Dense(NUM_CLASSES, activation="softmax", name="output_layer")(x)
